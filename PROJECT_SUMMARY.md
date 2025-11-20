@@ -43,6 +43,8 @@ This project is a complete Rasa-based chatbot for bank customer service, impleme
 - ✅ Check account balance (requires identity verification, mocked data)
 - ✅ View recent transactions (requires identity verification, mocked data)
 - ✅ Identity verification system with rate limiting (max 3 attempts)
+  - Automatically completes requested action after successful verification
+  - Handles verification flow seamlessly without user needing to repeat request
 
 #### Service Information
 - ✅ Branch locator (no verification required, public information)
@@ -52,11 +54,13 @@ This project is a complete Rasa-based chatbot for bank customer service, impleme
 - ✅ Lost/stolen card flow with empathy and guided steps
 - ✅ Recognizes variations: "lost my card", "card got stolen", "card was taken"
 - ✅ Provides steps only, does NOT perform actions directly
+- ✅ Handles verification requests even when misclassified as lost_card intent
 
 #### Human Escalation
 - ✅ Explicit handoff triggers (user requests human agent)
 - ✅ Automatic escalation (failed verification after 3 attempts)
 - ✅ Security-related handoff (sensitive actions)
+- ✅ Unknown query fallback handler with helpful message
 
 ### 3. NLP & Natural Dialogue Flow
 
@@ -167,9 +171,9 @@ Bot: For security purposes, I need to verify your identity before
      accessing account information. Please provide your account number 
      or customer ID.
 
-User: My account number is 123456789
-Bot: Identity verified successfully. How can I assist you?
-     Your checking account balance is $5,432.10.
+User: 123456789
+Bot: Identity verified. Your checking account balance is $5,432.10. 
+     Is there anything else I can help with?
 ```
 
 ### Example 3: Human Handoff
@@ -181,7 +185,7 @@ Bot: I'll connect you with a human agent right away. One moment please...
 ## Architecture Highlights
 
 ### 1. Intent Recognition
-- 13 intents covering all banking scenarios
+- 14 intents covering all banking scenarios (including `nlu_fallback`)
 - Multiple variations per intent for robust recognition
 - Entity extraction for context awareness
 

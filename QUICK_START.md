@@ -167,8 +167,8 @@ Bot: For security purposes, I need to verify your identity before accessing
      account information. Please provide your account number or customer ID.
 
 User: 123456789
-Bot: Identity verified successfully. How can I assist you?
-     Your checking account balance is $5,432.10.
+Bot: Identity verified. Your checking account balance is $5,432.10. 
+     Is there anything else I can help with?
 ```
 
 ### Scenario 2: Lost Card

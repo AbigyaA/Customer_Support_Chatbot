@@ -120,7 +120,9 @@ The chatbot recognizes the following intents:
 | `general_faq` | General banking questions | "what are your hours", "how do i transfer money" |
 | `request_human` | Request human agent | "i want to talk to a human", "this isn't helping" |
 | `verify_identity` | Provide verification info | "my account number is 123456" |
+| `provide_verification` | Provide account number for verification | "123456789", "my account number is 123456" |
 | `unknown_query` | Unrecognized input | Fallback intent |
+| `nlu_fallback` | Low-confidence predictions | Automatically triggered by FallbackClassifier |
 
 ### 2. Entities
 
@@ -129,18 +131,24 @@ Entities extracted from user messages:
 - `account_type`: Type of account (checking, savings)
 - `card_type`: Type of card (credit card, debit card)
 - `branch_location`: Location for branch search (e.g., "New York", "downtown")
+- `verification_method`: Method of verification (account_number, customer_id, etc.)
 - `account_number`: Account number for verification (extracted via pattern matching)
+- `customer_id`: Customer ID for verification (extracted via pattern matching)
 
 ### 3. Slots
 
 Slots used to maintain conversation state:
 
-- `account_type`: Current account type in context
-- `card_type`: Current card type in context
-- `identity_verified`: Boolean flag for verified identity
-- `requested_action`: Action pending identity verification
-- `verification_attempts`: Count of failed verification attempts
-- `branch_location`: Location for branch search
+| Slot | Type | Purpose | Initial Value |
+|------|------|---------|---------------|
+| `account_type` | text | Current account type in context | None |
+| `card_type` | text | Current card type in context | None |
+| `identity_verified` | bool | Flag for verified identity | false |
+| `requested_action` | text | Action pending identity verification | None |
+| `verification_attempts` | float | Count of failed verification attempts | 0.0 |
+| `branch_location` | text | Location for branch search | None |
+
+**Note:** `verification_attempts` uses `float` type (not `int`) because Rasa doesn't support integer slot types directly.
 
 ### 4. Custom Actions
 
@@ -166,7 +174,10 @@ Slots used to maintain conversation state:
 - **Purpose**: Verifies user identity before sensitive operations
 - **Method**: Accepts account number (6+ digits) - mocked verification
 - **Limits**: Maximum 3 attempts before escalation
-- **Response**: Sets `identity_verified` slot to True/False
+- **Response**: 
+  - If verified and `requested_action` is set: Automatically completes the requested action (balance/transactions)
+  - If verified and no pending action: Sets `identity_verified` slot to True
+  - If failed: Increments `verification_attempts` and offers handoff after 3 attempts
 
 #### `action_lost_card_flow`
 - **Purpose**: Handles lost/stolen card scenario
@@ -179,20 +190,27 @@ Slots used to maintain conversation state:
 - **Response**: Returns relevant FAQ answer
 
 #### `action_fallback_handler`
-- **Purpose**: Handles unknown queries
-- **Method**: Provides helpful fallback message
+- **Purpose**: Handles unknown queries and low-confidence predictions
+- **Method**: Provides helpful fallback message with available services list
+- **Triggered by**: `nlu_fallback` intent (from FallbackClassifier) or `unknown_query` intent
+- **Response**: Shows available services and offers human agent handoff
 - **Enhancement**: Can integrate GPT-based component (see below)
 
 ### 5. Conversation Flows (Stories)
 
 The chatbot implements several conversation flows:
 
-1. **Balance Check Flow**: Greet → Request Balance → Verify Identity → Show Balance
-2. **Transaction View Flow**: Request Transactions → Verify Identity → Show Transactions
-3. **Branch Locator Flow**: Request Branch → Show Branch Details
+1. **Balance Check Flow**: 
+   - Request Balance → Verify Identity → Provide Account Number → 
+   - Verification Action Automatically Completes Balance Check → Show Balance
+2. **Transaction View Flow**: 
+   - Request Transactions → Verify Identity → Provide Account Number →
+   - Verification Action Automatically Completes Transaction View → Show Transactions
+3. **Branch Locator Flow**: Request Branch → Show Branch Details (No verification required)
 4. **Lost Card Flow**: Report Lost Card → Empathy → Steps → Offer Handoff
-5. **FAQ Flow**: Ask Question → Provide Answer
+5. **FAQ Flow**: Ask Question → Provide Answer (No verification required)
 6. **Human Handoff Flow**: Request Agent → Connect to Human
+7. **Fallback Flow**: Unknown Query → Fallback Handler → Show Helpful Message
 
 ### 6. Security Measures
 
@@ -242,9 +260,8 @@ User: What's my balance?
 Bot: For security purposes, I need to verify your identity before accessing account 
      information. Please provide your account number or customer ID.
 
-User: My account number is 123456789
-Bot: Identity verified successfully. How can I assist you?
-     Your checking account balance is $5,432.10.
+User: 123456789
+Bot: Identity verified. Your checking account balance is $5,432.10. Is there anything else I can help with?
 
 User: Thanks, bye
 Bot: Thank you for contacting us. Have a great day!
@@ -427,7 +444,8 @@ rasa test nlu
 - [ ] General FAQ queries
 - [ ] Human handoff request
 - [ ] Failed verification (3 attempts)
-- [ ] Unknown query fallback
+- [ ] Unknown query fallback (should show helpful message)
+- [ ] Fallback handler displays available services
 
 ## Deployment
 

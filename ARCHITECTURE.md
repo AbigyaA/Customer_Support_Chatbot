@@ -37,7 +37,9 @@ The chatbot uses Rasa's default NLU pipeline with the following components:
 - `affirm`, `deny`: Confirmation responses
 - `request_human`: Escalation request
 - `verify_identity`: Provide verification information
+- `provide_verification`: User provides account number for verification
 - `unknown_query`: Fallback for unrecognized input
+- `nlu_fallback`: Automatically triggered by FallbackClassifier when confidence is low (< 0.3)
 
 ### Sample Utterances & Variations
 
@@ -225,9 +227,15 @@ Prevent unauthorized access to account information.
 
 #### Current Implementation
 ```python
-def verify_identity(account_number):
+def verify_identity(account_number, requested_action):
     # Mocked: Accepts 6+ digit numbers
     if len(str(account_number)) >= 6:
+        if requested_action == "check_balance":
+            # Automatically complete balance check
+            return show_balance()
+        elif requested_action == "view_transactions":
+            # Automatically show transactions
+            return show_transactions()
         return True
     return False
 ```
@@ -268,19 +276,20 @@ def verify_identity(account_number):
 ### Slot-Based Security
 
 **Security Slots:**
-- `identity_verified`: Boolean flag (default: False)
-- `verification_attempts`: Counter (max: 3)
-- `requested_action`: Action pending verification
+- `identity_verified`: Boolean flag (default: False, type: bool)
+- `verification_attempts`: Counter (max: 3, type: float, initial: 0.0)
+- `requested_action`: Action pending verification (type: text)
 
 **Slot Flow:**
 ```
 User requests sensitive info
-→ Set requested_action slot
+→ Set requested_action slot (e.g., "check_balance")
 → Request verification
 → User provides account number
 → Verify identity
 → Set identity_verified = True
-→ Perform action
+→ Automatically complete requested_action (balance/transactions shown immediately)
+→ Clear requested_action slot
 ```
 
 ### Conversation Security
@@ -409,11 +418,20 @@ POST /api/v1/cards/{cardId}/freeze  (Not called by bot)
 2. Rasa NLU: Classifies as check_balance intent
 3. Rasa Core: Triggers action_check_balance
 4. Action Server: Checks identity_verified slot
-5. If not verified: Request verification
-6. If verified: Call Account Service API
-7. API Response: {"balance": "$5,432.10", "currency": "USD"}
-8. Action: Format and return to user
-9. Rasa Core: Utter balance_info response
+5. If not verified: 
+   - Set requested_action = "check_balance"
+   - Request verification (dispatcher.utter_message)
+6. User: Provides account number (e.g., "123456789")
+7. Rasa NLU: Classifies as provide_verification intent
+8. Rasa Core: Triggers action_verify_identity
+9. Action Server: Verifies identity (mocked validation)
+10. If verified:
+    - Set identity_verified = True
+    - Check requested_action slot
+    - Automatically complete balance check (no need to re-trigger)
+    - Format and return balance directly: "Identity verified. Your checking account balance is $5,432.10."
+    - Clear requested_action slot
+11. User receives balance immediately without repeating request
 ```
 
 #### Branch Locator Flow
