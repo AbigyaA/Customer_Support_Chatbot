@@ -1,0 +1,115 @@
+version: "3.1"
+
+stories:
+- story: happy path balance check
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: check_balance
+    - action: action_check_balance
+    - intent: provide_verification
+    - action: action_verify_identity
+
+- story: balance check with account type
+  steps:
+    - intent: check_balance
+      entities:
+      - account_type: "savings"
+    - action: action_check_balance
+    - intent: provide_verification
+    - action: action_verify_identity
+
+- story: view transactions flow
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: view_transactions
+    - action: action_view_transactions
+    - intent: provide_verification
+    - action: action_verify_identity
+
+- story: branch locator
+  steps:
+    - intent: branch_locator
+    - action: action_branch_locator
+
+- story: branch locator with location
+  steps:
+    - intent: branch_locator
+      entities:
+      - branch_location: "New York"
+    - action: action_branch_locator
+
+- story: lost card happy path
+  steps:
+    - intent: lost_card
+      entities:
+      - card_type: "credit card"
+    - action: action_lost_card_flow
+    - intent: affirm
+    - action: utter_human_handoff
+
+- story: lost card without replacement
+  steps:
+    - intent: lost_card
+    - action: action_lost_card_flow
+    - intent: deny
+    - action: utter_goodbye
+
+- story: lost card variation - stolen
+  steps:
+    - intent: lost_card
+      entities:
+      - card_type: "debit card"
+    - action: action_lost_card_flow
+
+- story: freeze card request
+  steps:
+    - intent: freeze_card
+    - action: utter_freeze_card_steps
+    - intent: request_human
+    - action: utter_human_handoff
+
+- story: general FAQ
+  steps:
+    - intent: general_faq
+    - action: action_general_faq
+
+- story: request human agent
+  steps:
+    - intent: request_human
+    - action: utter_human_handoff
+
+- story: identity verification failed
+  steps:
+    - intent: check_balance
+    - action: action_verify_identity
+    - intent: provide_verification
+    - action: action_verify_identity
+    - action: utter_identity_failed
+    - intent: request_human
+    - action: utter_human_handoff
+
+- story: unknown query with fallback
+  steps:
+    - intent: unknown_query
+    - action: action_fallback_handler
+
+- story: deny handoff after lost card
+  steps:
+    - intent: lost_card
+    - action: action_lost_card_flow
+    - intent: deny
+    - action: utter_goodbye
+
+- story: multiple queries in sequence
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: branch_locator
+    - action: action_branch_locator
+    - intent: general_faq
+    - action: action_general_faq
+    - intent: goodbye
+    - action: utter_goodbye
+

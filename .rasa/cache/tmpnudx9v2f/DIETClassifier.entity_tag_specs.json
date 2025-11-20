@@ -1,0 +1,52 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-account_number",
+      "2": "I-account_number",
+      "3": "L-account_number",
+      "4": "U-account_number",
+      "5": "B-account_type",
+      "6": "I-account_type",
+      "7": "L-account_type",
+      "8": "U-account_type",
+      "9": "B-branch_location",
+      "10": "I-branch_location",
+      "11": "L-branch_location",
+      "12": "U-branch_location",
+      "13": "B-card_type",
+      "14": "I-card_type",
+      "15": "L-card_type",
+      "16": "U-card_type",
+      "17": "B-customer_id",
+      "18": "I-customer_id",
+      "19": "L-customer_id",
+      "20": "U-customer_id",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-account_number": 1,
+      "I-account_number": 2,
+      "L-account_number": 3,
+      "U-account_number": 4,
+      "B-account_type": 5,
+      "I-account_type": 6,
+      "L-account_type": 7,
+      "U-account_type": 8,
+      "B-branch_location": 9,
+      "I-branch_location": 10,
+      "L-branch_location": 11,
+      "U-branch_location": 12,
+      "B-card_type": 13,
+      "I-card_type": 14,
+      "L-card_type": 15,
+      "U-card_type": 16,
+      "B-customer_id": 17,
+      "I-customer_id": 18,
+      "L-customer_id": 19,
+      "U-customer_id": 20,
+      "O": 0
+    },
+    "num_tags": 21
+  }
+]

@@ -1,0 +1,29 @@
+version: "3.1"
+
+rules:
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Greet user
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: Always handoff to human when explicitly requested
+  steps:
+    - intent: request_human
+    - action: utter_human_handoff
+
+- rule: Handle fallback for unknown queries
+  steps:
+    - intent: nlu_fallback
+    - action: action_fallback_handler
+
+- rule: Handle unknown query intent
+  steps:
+    - intent: unknown_query
+    - action: action_fallback_handler
+
+

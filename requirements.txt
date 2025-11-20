@@ -1,0 +1,9 @@
+# Rasa requires Python 3.8-3.10
+# If you have Python 3.11+, use Python 3.10 in a virtual environment
+rasa>=3.6.0,<4.0.0
+rasa-sdk>=3.6.0,<4.0.0
+python-dateutil>=2.8.0
+
+# Optional: For GPT-based fallback (requires OpenAI API key)
+# openai>=1.0.0
+

@@ -1,0 +1,207 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hello
+    - hi
+    - hey
+    - good morning
+    - good afternoon
+    - good evening
+    - greetings
+    - hi there
+    - hello there
+    - howdy
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+    - see ya
+    - talk to you later
+    - farewell
+    - have a nice day
+    - thanks bye
+    - bye bye
+    - see you soon
+
+- intent: affirm
+  examples: |
+    - yes
+    - yep
+    - yeah
+    - sure
+    - absolutely
+    - correct
+    - right
+    - of course
+    - okay
+    - ok
+    - yes please
+    - yes i would
+    - that's right
+    - exactly
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - not really
+    - no thanks
+    - nah
+    - no way
+    - definitely not
+    - i don't think so
+    - that's not right
+
+- intent: check_balance
+  examples: |
+    - what's my balance
+    - check my account balance
+    - how much money do i have
+    - show me my balance
+    - what's my account balance
+    - balance check
+    - check balance
+    - i want to see my balance
+    - can you tell me my balance
+    - what is my current balance
+    - check my [savings](account_type) account balance
+    - balance on my [checking](account_type) account
+    - how much is in my [savings](account_type) account
+    - show balance for my [checking](account_type) account
+
+- intent: view_transactions
+  examples: |
+    - show my recent transactions
+    - what are my recent transactions
+    - transaction history
+    - recent transactions
+    - show transactions
+    - view my transactions
+    - last transactions
+    - transaction list
+    - i want to see my transactions
+    - can you show my transaction history
+    - recent activity
+    - show me recent activity on my account
+
+- intent: branch_locator
+  examples: |
+    - find a branch
+    - where is the nearest branch
+    - branch location
+    - locate branch
+    - find branch near me
+    - where's the closest branch
+    - branch locator
+    - find branch in [New York](branch_location)
+    - nearest branch to [downtown](branch_location)
+    - branch near [123 Main St](branch_location)
+    - show me branches
+    - what branches are nearby
+    - i need to visit a branch
+
+- intent: lost_card
+  examples: |
+    - i lost my card
+    - my card is lost
+    - i lost my [credit card](card_type)
+    - my [debit card](card_type) is missing
+    - card got stolen
+    - someone stole my card
+    - my card was stolen
+    - i can't find my card
+    - my card disappeared
+    - card is gone
+    - i think my card is stolen
+    - my [credit card](card_type) got stolen
+    - someone took my [debit card](card_type)
+    - lost my [credit card](card_type)
+    - misplaced my card
+    - my card was taken
+    - card missing
+
+- intent: freeze_card
+  examples: |
+    - freeze my card
+    - i want to freeze my card
+    - can you freeze my card
+    - block my card
+    - disable my card
+    - deactivate my card
+    - stop my card
+    - freeze my [credit card](card_type)
+    - block my [debit card](card_type)
+    - i need to freeze my card immediately
+    - suspend my card
+    - cancel my card
+
+- intent: general_faq
+  examples: |
+    - what are your hours
+    - banking hours
+    - when are you open
+    - what services do you offer
+    - how do i open an account
+    - what is the minimum balance
+    - interest rates
+    - what are your fees
+    - how do i transfer money
+    - how to pay bills
+    - how can i change my password
+    - reset password
+    - how do i update my address
+    - mobile banking
+    - online banking
+    - what are your rates
+    - tell me about your services
+    - what can i do with online banking
+
+- intent: request_human
+  examples: |
+    - i want to talk to a human
+    - can i speak with someone
+    - connect me to an agent
+    - i need a real person
+    - talk to a person
+    - human agent
+    - speak to representative
+    - this isn't helping
+    - this bot isn't helping
+    - i need to talk to someone
+    - can i talk to a human agent
+    - transfer me to a person
+    - connect me with support
+    - i want human assistance
+    - agent please
+    - this isn't working i need help
+
+- intent: verify_identity
+  examples: |
+    - my account number is [123456789](account_number)
+    - account number [987654321](account_number)
+    - customer id [CUST12345](customer_id)
+    - my customer id is [CUST67890](customer_id)
+    - here's my account number [111222333](account_number)
+    - verify with account [444555666](account_number)
+
+- intent: provide_verification
+  examples: |
+    - [123456](account_number)
+    - [123456789](account_number)
+    - [1234567](account_number)
+    - [987654321](account_number)
+    - my account is [789012](account_number)
+    - my account number is [123456789](account_number)
+    - [CUST123](customer_id)
+    - it's [345678](account_number)
+    - account [901234](account_number)
+    - [111222333](account_number)
+    - [444555666](account_number)
+    - [777888999](account_number)
+    - [12345](account_number)
+    - [67890](account_number)
+

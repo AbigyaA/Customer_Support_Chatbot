@@ -1,0 +1,102 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - check_balance
+  - view_transactions
+  - branch_locator
+  - lost_card
+  - freeze_card
+  - general_faq
+  - request_human
+  - verify_identity
+  - provide_verification
+  - unknown_query
+  - nlu_fallback
+
+entities:
+  - account_type
+  - card_type
+  - branch_location
+  - verification_method
+  - account_number
+  - customer_id
+
+slots:
+  account_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: account_type
+  card_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: card_type
+  identity_verified:
+    type: bool
+    initial_value: false
+    mappings:
+      - type: custom
+  requested_action:
+    type: text
+    mappings:
+      - type: custom
+  verification_attempts:
+    type: float
+    initial_value: 0.0
+    mappings:
+      - type: custom
+  branch_location:
+    type: text
+    mappings:
+      - type: custom
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm your bank's virtual assistant. How can I help you today?"
+  
+  utter_goodbye:
+    - text: "Thank you for contacting us. Have a great day!"
+  
+  utter_ask_account_type:
+    - text: "Which account would you like to check? (savings/checking)"
+  
+  utter_ask_verify_identity:
+    - text: "For security purposes, I need to verify your identity before accessing account information. Please provide your account number or customer ID."
+  
+  utter_identity_verified:
+    - text: "Thank you. Your identity has been verified. How can I assist you?"
+  
+  utter_identity_failed:
+    - text: "I'm sorry, I couldn't verify your identity. For your security, I can only provide general information without verification. Would you like to speak with a human agent?"
+  
+  utter_freeze_card_steps:
+    - text: "To freeze your card, you can:\n1. Use our mobile banking app (Go to Cards section > Freeze Card)\n2. Log in to online banking and navigate to Card Services\n3. Call our 24/7 hotline at 1-800-BANK-HELP\n\nFor security reasons, I cannot freeze your card directly through this chat. Would you like to speak with a human agent who can assist you immediately?"
+  
+  utter_human_handoff:
+    - text: "I'll connect you with a human agent right away. One moment please..."
+  
+  utter_cannot_perform_action:
+    - text: "For security reasons, I cannot perform that action directly. However, I can guide you through the steps or connect you with a human agent who can help. What would you prefer?"
+  
+  utter_unknown_query:
+    - text: "I'm not entirely sure how to help with that. Let me try to assist you based on what I understand..."
+
+actions:
+  - action_check_balance
+  - action_view_transactions
+  - action_branch_locator
+  - action_verify_identity
+  - action_lost_card_flow
+  - action_general_faq
+  - action_fallback_handler
+  - action_set_identity_verified
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+

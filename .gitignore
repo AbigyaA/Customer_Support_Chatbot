@@ -1,0 +1,44 @@
+# Rasa
+models/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# Environment variables
+.env
+.env.local
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+
+# Temporary files
+*.tmp
+*.bak
+

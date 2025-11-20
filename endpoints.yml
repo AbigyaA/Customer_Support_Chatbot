@@ -1,0 +1,23 @@
+# This file contains the different endpoints your bot can use.
+# https://rasa.com/docs/rasa/model-serving/
+
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+#server_endpoint:
+#  url: "http://localhost:5005"
+
+#tracker_store:
+#  type: redis
+#  url: localhost
+#  port: 6379
+#  db: 0
+#  password: PASSWORD
+#  record_exp: 30000
+
+#event_broker:
+#  url: localhost
+#  port: 5672
+#  username: username
+#  password: password
+
